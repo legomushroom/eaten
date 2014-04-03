@@ -26,6 +26,7 @@
       this.$fish5 = $('#js-fish5');
       this.$plate = $('#js-plate');
       this.$fork = $('#js-fork');
+      this.$logo = $('#js-logo');
       this.$eatenPath = $('#js-eaten-path');
       this.$tree = $('#js-tree');
       return this.$river = $('#js-river');
@@ -220,7 +221,13 @@
           };
         })(this)
       });
-      return this.controller.addTween(start, this.forkTween, dur);
+      this.controller.addTween(start, this.forkTween, dur);
+      start += dur / 6;
+      dur = this.frameDurationTime / 2;
+      this.logo = TweenMax.to(this.$logo, 1, {
+        opacity: 1
+      });
+      return this.controller.addTween(start, this.logo, dur);
     };
 
     Main.prototype.bind = function(func, context) {

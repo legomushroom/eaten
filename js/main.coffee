@@ -21,6 +21,7 @@ class Main
     @$fish5 = $('#js-fish5')
     @$plate = $('#js-plate')
     @$fork = $('#js-fork')
+    @$logo = $('#js-logo')
     @$eatenPath = $('#js-eaten-path')
     @$tree = $('#js-tree')
     @$river = $('#js-river')
@@ -151,6 +152,11 @@ class Main
         offset = @forkTween.target.startOffset
         @$fork[0].setAttribute 'y', offset
     @controller.addTween start, @forkTween, dur
+
+    start += dur/6
+    dur = @frameDurationTime/2
+    @logo  = TweenMax.to @$logo, 1, { opacity: 1 }
+    @controller.addTween start, @logo, dur
 
   bind:(func, context) ->
     wrapper = ->
