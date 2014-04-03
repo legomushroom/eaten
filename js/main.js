@@ -4,142 +4,207 @@
   Main = (function() {
     function Main() {
       this.vars();
-      this.fixIEPosition();
-      this.animate();
-      this.setInterval();
+      this.initScroll();
+      this.describeSequence();
     }
 
-    Main.prototype.setInterval = function() {
-      this.interval = setInterval(this.launch, 2 * this.duration);
-      return this.launch();
-    };
-
-    Main.prototype.reset = function() {
-      this.offset = this.startOffset;
-      this.path.setAttribute('startOffset', this.startOffset);
-      this.intervalCnt = 0;
-      clearInterval(this.interval);
-      return this.setInterval();
-    };
-
     Main.prototype.vars = function() {
-      this.animate = this.bind(this.animate, this);
-      this.launch = this.bind(this.launch, this);
-      this.path = document.getElementById('js-words-path');
-      this.realPath = document.getElementById('words-path');
-      this.pathLength = this.realPath.getTotalLength();
-      if (this.isFF()) {
-        this.pathLength /= 1000000;
-      }
-      this.adamsApple = document.getElementById('js-adams-apple');
-      this.text = document.getElementById('js-text');
-      this.surpCnt = 2;
-      this.delay = 3000;
-      this.duration = 5000;
-      this.startOffset = parseInt(this.path.getAttribute('startOffset'), 10);
-      this.intervalCnt = 0;
-      return this.offset = this.startOffset;
+      this.maxScroll = -6000;
+      this.frameDurationTime = 1000;
+      this.$treePath = $('#js-tree-path');
+      this.$riverPath = $('#js-river-path');
+      this.$skullPath = $('#js-skull-path');
+      this.$skull1 = $('#js-skull1');
+      this.$skull2 = $('#js-skull2');
+      this.$skull3 = $('#js-skull3');
+      this.$skull4 = $('#js-skull4');
+      this.$skull5 = $('#js-skull5');
+      this.$fish1 = $('#js-fish1');
+      this.$fish2 = $('#js-fish2');
+      this.$fish3 = $('#js-fish3');
+      this.$fish4 = $('#js-fish4');
+      this.$fish5 = $('#js-fish5');
+      this.$plate = $('#js-plate');
+      this.$eatenPath = $('#js-eaten-path');
+      this.$tree = $('#js-tree');
+      return this.$river = $('#js-river');
     };
 
-    Main.prototype.animate = function() {
-      requestAnimationFrame(this.animate);
-      return TWEEN.update();
-    };
-
-    Main.prototype.fixIEPosition = function() {
-      if (this.isIE() || this.isFF()) {
-        this.text.setAttribute('transform', "translate(-2,1)");
-        return this.shortenOffset();
-      }
-    };
-
-    Main.prototype.shortenOffset = function() {
-      this.startOffset = -800;
-      this.offset = this.startOffset;
-      return this.path.setAttribute('startOffset', this.startOffset);
-    };
-
-    Main.prototype.launch = function() {
-      var it, step;
-      if (++this.intervalCnt > (2 * this.surpCnt) + 1) {
-        this.reset();
-      }
-      it = this;
-      step = this.pathLength / this.surpCnt;
-      return this.tween1 = new TWEEN.Tween({
-        offset: it.offset,
-        p: 0
-      }).to({
-        offset: it.offset - step,
-        p: 1
-      }, this.duration).easing(TWEEN.Easing.Sinusoidal.Out).onUpdate(function() {
-        it.path.setAttribute('startOffset', this.offset);
-        return it.offset = this.offset;
-      }).onComplete(function() {
-        return it.tween2 = new TWEEN.Tween({
-          offsetReverse: it.offset,
-          p: 0
-        }).to({
-          offsetReverse: it.offset + 50,
-          p: 1
-        }, it.duration).easing(TWEEN.Easing.Elastic.Out).onUpdate(function() {
-          it.path.setAttribute('startOffset', this.offsetReverse);
-          return it.offset = this.offsetReverse;
-        }).start();
-      }).onStart(function() {
-        return it.gulp();
-      }).start();
-    };
-
-    Main.prototype.gulp = function() {
+    Main.prototype.initScroll = function() {
       var it;
-      it = this;
-      this.neck2 = new TWEEN.Tween({
-        y: -15,
-        angle: 1,
-        p: 0
-      }).to({
-        y: 0,
-        angle: 0,
-        p: 1
-      }, this.duration / 8).easing(TWEEN.Easing.Back.Out).onUpdate(function() {
-        return it.adamsApple.setAttribute('transform', "translate(0, " + this.y + ")");
+      this.scroller = new IScroll('#js-main', {
+        probeType: 3,
+        mouseWheel: true,
+        deceleration: 0.001
       });
-      return this.neck1 = new TWEEN.Tween({
-        y: 0,
-        angle: 0,
-        p: 0
-      }).to({
-        y: -15,
-        angle: 1,
-        p: 1
-      }, this.duration / 10).easing(TWEEN.Easing.Back.Out).onUpdate(function() {
-        return it.adamsApple.setAttribute('transform', "translate(0, " + this.y + ")");
-      }).chain(this.neck2).delay(this.duration - (this.duration / 10)).start();
+      document.addEventListener('touchmove', (function(e) {
+        return e.preventDefault();
+      }), false);
+      this.controller = $.superscrollorama({
+        triggerAtCenter: false,
+        playoutAnimations: true
+      });
+      it = this;
+      this.scroller.on('scroll', function() {
+        return it.updateScrollPos(this, it);
+      });
+      return this.scroller.on('scrollEnd', function() {
+        return it.updateScrollPos(this, it);
+      });
     };
 
-    Main.prototype.isIE = function() {
-      var msie, rv, rvNum, trident, ua, undef;
-      if (this.isIECache) {
-        return this.isIECache;
-      }
-      undef = void 0;
-      rv = -1;
-      ua = window.navigator.userAgent;
-      msie = ua.indexOf("MSIE ");
-      trident = ua.indexOf("Trident/");
-      if (msie > 0) {
-        rv = parseInt(ua.substring(msie + 5, ua.indexOf(".", msie)), 10);
-      } else if (trident > 0) {
-        rvNum = ua.indexOf("rv:");
-        rv = parseInt(ua.substring(rvNum + 3, ua.indexOf(".", rvNum)), 10);
-      }
-      this.isIECache = (rv > -1 ? rv : undef);
-      return this.isIECache;
+    Main.prototype.updateScrollPos = function(that, it) {
+      (that.y < it.maxScroll) && (that.y = it.maxScroll);
+      return it.controller.setScrollContainerOffset(0, -(that.y >> 0)).triggerCheckAnim(true);
     };
 
-    Main.prototype.isFF = function() {
-      return navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+    Main.prototype.describeSequence = function() {
+      var dur, start;
+      start = 1;
+      dur = 2 * this.frameDurationTime;
+      this.treePath = TweenMax.to({
+        startOffset: 2800
+      }, 1, {
+        startOffset: 200,
+        onUpdate: (function(_this) {
+          return function() {
+            var offset;
+            offset = _this.treePath.target.startOffset;
+            return _this.$treePath[0].setAttribute('startOffset', offset);
+          };
+        })(this)
+      });
+      this.controller.addTween(start, this.treePath, dur);
+      start += this.frameDurationTime / 4;
+      dur = this.frameDurationTime;
+      this.tree = TweenMax.to(this.$tree, 1, {
+        opacity: 0,
+        ease: "Expo.easeIn"
+      });
+      this.controller.addTween(start, this.tree, dur);
+      start += this.frameDurationTime / 4;
+      dur = this.frameDurationTime;
+      this.grass = TweenMax.to($(document.body), 1, {
+        backgroundColor: '#888',
+        ease: "Expo.easeIn"
+      });
+      this.controller.addTween(start, this.grass, dur);
+      start += dur;
+      dur = 2 * this.frameDurationTime;
+      this.river1 = TweenMax.to({
+        startOffset: 2400
+      }, 1, {
+        startOffset: 200,
+        onUpdate: (function(_this) {
+          return function() {
+            var offset;
+            offset = _this.river1.target.startOffset;
+            return _this.$riverPath[0].setAttribute('startOffset', offset);
+          };
+        })(this)
+      });
+      this.controller.addTween(start, this.river1, dur);
+      start += dur / 4;
+      dur = this.frameDurationTime;
+      this.river = TweenMax.to(this.$river, 1, {
+        fill: '#333'
+      });
+      this.controller.addTween(start, this.river, dur);
+      start += dur;
+      dur = 2 * this.frameDurationTime;
+      this.skull = TweenMax.to({
+        startOffset: 2600
+      }, 1, {
+        startOffset: 100,
+        onUpdate: (function(_this) {
+          return function() {
+            var offset;
+            offset = _this.skull.target.startOffset;
+            return _this.$skullPath[0].setAttribute('startOffset', offset);
+          };
+        })(this)
+      });
+      this.controller.addTween(start, this.skull, dur);
+      start += dur / 8;
+      dur = this.frameDurationTime / 2;
+      this.skull3 = TweenMax.to(this.$skull3, 1, {
+        opacity: .25
+      });
+      this.controller.addTween(start, this.skull3, dur);
+      this.fish5 = TweenMax.to(this.$fish5, 1, {
+        opacity: 0
+      });
+      this.controller.addTween(start, this.fish5, dur);
+      start += dur / 4;
+      dur = this.frameDurationTime / 2;
+      this.skull2 = TweenMax.to(this.$skull2, 1, {
+        opacity: .25
+      });
+      this.controller.addTween(start, this.skull2, dur);
+      this.fish4 = TweenMax.to(this.$fish4, 1, {
+        opacity: 0
+      });
+      this.controller.addTween(start, this.fish4, dur);
+      start += dur / 6;
+      dur = this.frameDurationTime / 2;
+      this.skull1 = TweenMax.to(this.$skull1, 1, {
+        opacity: .25
+      });
+      this.controller.addTween(start, this.skull1, dur);
+      this.fish3 = TweenMax.to(this.$fish3, 1, {
+        opacity: 0
+      });
+      this.controller.addTween(start, this.fish3, dur);
+      start += dur / 6;
+      dur = this.frameDurationTime / 2;
+      this.skull5 = TweenMax.to(this.$skull5, 1, {
+        opacity: .25
+      });
+      this.controller.addTween(start, this.skull5, dur);
+      this.fish2 = TweenMax.to(this.$fish2, 1, {
+        opacity: 0
+      });
+      this.controller.addTween(start, this.fish2, dur);
+      start += dur / 6;
+      dur = this.frameDurationTime / 2;
+      this.skull4 = TweenMax.to(this.$skull4, 1, {
+        opacity: .25
+      });
+      this.controller.addTween(start, this.skull4, dur);
+      this.fish1 = TweenMax.to(this.$fish1, 1, {
+        opacity: 0
+      });
+      this.controller.addTween(start, this.fish1, dur);
+      start += dur;
+      dur = this.frameDurationTime;
+      this.plate = TweenMax.to({
+        startOffset: 1000
+      }, 1, {
+        startOffset: 0,
+        onUpdate: (function(_this) {
+          return function() {
+            var offset;
+            offset = _this.plate.target.startOffset;
+            return _this.$plate[0].setAttribute('y', offset);
+          };
+        })(this)
+      });
+      this.controller.addTween(start, this.plate, dur);
+      start += dur / 2;
+      dur = 2 * this.frameDurationTime;
+      this.eaten = TweenMax.to({
+        startOffset: 2600
+      }, 1, {
+        startOffset: 600,
+        onUpdate: (function(_this) {
+          return function() {
+            var offset;
+            offset = _this.eaten.target.startOffset;
+            return _this.$eatenPath[0].setAttribute('startOffset', offset);
+          };
+        })(this)
+      });
+      return this.controller.addTween(start, this.eaten, dur);
     };
 
     Main.prototype.bind = function(func, context) {
