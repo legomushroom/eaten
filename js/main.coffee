@@ -4,7 +4,7 @@ class Main
     @initScroll()
     @describeSequence()
   vars:->
-    @maxScroll = -6000
+    @maxScroll = -10000
     @frameDurationTime = 1000
     @$treePath = $('#js-tree-path')
     @$riverPath = $('#js-river-path')
@@ -20,6 +20,7 @@ class Main
     @$fish4 = $('#js-fish4')
     @$fish5 = $('#js-fish5')
     @$plate = $('#js-plate')
+    @$fork = $('#js-fork')
     @$eatenPath = $('#js-eaten-path')
     @$tree = $('#js-tree')
     @$river = $('#js-river')
@@ -60,7 +61,7 @@ class Main
     start += @frameDurationTime/4
     dur = @frameDurationTime
     @grass  = TweenMax.to $(document.body), 1,
-      backgroundColor: '#888'
+      backgroundColor: '#c78743'
       ease:"Expo.easeIn"
 
     @controller.addTween start, @grass, dur
@@ -136,13 +137,20 @@ class Main
     start += dur/2
     dur = 2*@frameDurationTime
     @eaten  = TweenMax.to { startOffset: 2600 }, 1,
-      startOffset: 600
+      startOffset: 800
       onUpdate:=>
         offset = @eaten.target.startOffset
         @$eatenPath[0].setAttribute 'startOffset', offset
     @controller.addTween start, @eaten, dur
 
-    
+    start += dur/2
+    dur = @frameDurationTime
+    @forkTween  = TweenMax.to { startOffset: 1000 }, 1,
+      startOffset: -150
+      onUpdate:=>
+        offset = @forkTween.target.startOffset
+        @$fork[0].setAttribute 'y', offset
+    @controller.addTween start, @forkTween, dur
 
   bind:(func, context) ->
     wrapper = ->

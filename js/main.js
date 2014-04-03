@@ -9,7 +9,7 @@
     }
 
     Main.prototype.vars = function() {
-      this.maxScroll = -6000;
+      this.maxScroll = -10000;
       this.frameDurationTime = 1000;
       this.$treePath = $('#js-tree-path');
       this.$riverPath = $('#js-river-path');
@@ -25,6 +25,7 @@
       this.$fish4 = $('#js-fish4');
       this.$fish5 = $('#js-fish5');
       this.$plate = $('#js-plate');
+      this.$fork = $('#js-fork');
       this.$eatenPath = $('#js-eaten-path');
       this.$tree = $('#js-tree');
       return this.$river = $('#js-river');
@@ -85,7 +86,7 @@
       start += this.frameDurationTime / 4;
       dur = this.frameDurationTime;
       this.grass = TweenMax.to($(document.body), 1, {
-        backgroundColor: '#888',
+        backgroundColor: '#c78743',
         ease: "Expo.easeIn"
       });
       this.controller.addTween(start, this.grass, dur);
@@ -195,7 +196,7 @@
       this.eaten = TweenMax.to({
         startOffset: 2600
       }, 1, {
-        startOffset: 600,
+        startOffset: 800,
         onUpdate: (function(_this) {
           return function() {
             var offset;
@@ -204,7 +205,22 @@
           };
         })(this)
       });
-      return this.controller.addTween(start, this.eaten, dur);
+      this.controller.addTween(start, this.eaten, dur);
+      start += dur / 2;
+      dur = this.frameDurationTime;
+      this.forkTween = TweenMax.to({
+        startOffset: 1000
+      }, 1, {
+        startOffset: -150,
+        onUpdate: (function(_this) {
+          return function() {
+            var offset;
+            offset = _this.forkTween.target.startOffset;
+            return _this.$fork[0].setAttribute('y', offset);
+          };
+        })(this)
+      });
+      return this.controller.addTween(start, this.forkTween, dur);
     };
 
     Main.prototype.bind = function(func, context) {
