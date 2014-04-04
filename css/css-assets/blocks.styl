@@ -5,9 +5,13 @@
 .text
 	fill white
 	font-size 26px
+	white-space nowrap
 	font-family 'Offside'
 	&--label
 		font-size 13px
+
+
+
 
 .svg-container
 	padding-bottom 70.3125%
@@ -19,5 +23,8 @@
 		svg 
 			rect 100%
 
-// @-moz-document url-prefix() {
-// }
+@-moz-document url-prefix() {
+	.text{
+		font-family 'Open Sans'
+	}
+}
