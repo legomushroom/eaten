@@ -9,7 +9,7 @@
     }
 
     Main.prototype.vars = function() {
-      this.maxScroll = -10000;
+      this.maxScroll = -8000;
       this.frameDurationTime = 1000;
       this.$treePath = $('#js-tree-path');
       this.$riverPath = $('#js-river-path');
@@ -26,6 +26,7 @@
       this.$fish5 = $('#js-fish5');
       this.$plate = $('#js-plate');
       this.$fork = $('#js-fork');
+      this.$knife = $('#js-knife');
       this.$logo = $('#js-logo');
       this.$eatenPath = $('#js-eaten-path');
       this.$tree = $('#js-tree');
@@ -87,7 +88,7 @@
       start += this.frameDurationTime / 4;
       dur = this.frameDurationTime;
       this.grass = TweenMax.to($(document.body), 1, {
-        backgroundColor: '#c78743',
+        backgroundColor: '#f5cf43',
         ease: "Expo.easeIn"
       });
       this.controller.addTween(start, this.grass, dur);
@@ -112,6 +113,11 @@
         fill: '#333'
       });
       this.controller.addTween(start, this.river, dur);
+      this.grass2 = TweenMax.to($(document.body), 1, {
+        backgroundColor: '#774F38',
+        ease: "Expo.easeIn"
+      });
+      this.controller.addTween(start, this.grass2, dur);
       start += dur;
       dur = 2 * this.frameDurationTime;
       this.skull = TweenMax.to({
@@ -130,7 +136,7 @@
       start += dur / 8;
       dur = this.frameDurationTime / 2;
       this.skull3 = TweenMax.to(this.$skull3, 1, {
-        opacity: .25
+        opacity: .15
       });
       this.controller.addTween(start, this.skull3, dur);
       this.fish5 = TweenMax.to(this.$fish5, 1, {
@@ -140,7 +146,7 @@
       start += dur / 4;
       dur = this.frameDurationTime / 2;
       this.skull2 = TweenMax.to(this.$skull2, 1, {
-        opacity: .25
+        opacity: .15
       });
       this.controller.addTween(start, this.skull2, dur);
       this.fish4 = TweenMax.to(this.$fish4, 1, {
@@ -150,7 +156,7 @@
       start += dur / 6;
       dur = this.frameDurationTime / 2;
       this.skull1 = TweenMax.to(this.$skull1, 1, {
-        opacity: .25
+        opacity: .15
       });
       this.controller.addTween(start, this.skull1, dur);
       this.fish3 = TweenMax.to(this.$fish3, 1, {
@@ -160,7 +166,7 @@
       start += dur / 6;
       dur = this.frameDurationTime / 2;
       this.skull5 = TweenMax.to(this.$skull5, 1, {
-        opacity: .25
+        opacity: .15
       });
       this.controller.addTween(start, this.skull5, dur);
       this.fish2 = TweenMax.to(this.$fish2, 1, {
@@ -170,7 +176,7 @@
       start += dur / 6;
       dur = this.frameDurationTime / 2;
       this.skull4 = TweenMax.to(this.$skull4, 1, {
-        opacity: .25
+        opacity: .15
       });
       this.controller.addTween(start, this.skull4, dur);
       this.fish1 = TweenMax.to(this.$fish1, 1, {
@@ -197,7 +203,7 @@
       this.eaten = TweenMax.to({
         startOffset: 2600
       }, 1, {
-        startOffset: 800,
+        startOffset: 880,
         onUpdate: (function(_this) {
           return function() {
             var offset;
@@ -212,17 +218,18 @@
       this.forkTween = TweenMax.to({
         startOffset: 1000
       }, 1, {
-        startOffset: -150,
+        startOffset: 50,
         onUpdate: (function(_this) {
           return function() {
             var offset;
             offset = _this.forkTween.target.startOffset;
-            return _this.$fork[0].setAttribute('y', offset);
+            _this.$fork[0].setAttribute('transform', "translate(0," + offset + ")");
+            return _this.$knife[0].setAttribute('transform', "translate(0," + offset + ")");
           };
         })(this)
       });
       this.controller.addTween(start, this.forkTween, dur);
-      start += dur / 6;
+      start += dur;
       dur = this.frameDurationTime / 2;
       this.logo = TweenMax.to(this.$logo, 1, {
         opacity: 1

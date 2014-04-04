@@ -4,7 +4,7 @@ class Main
     @initScroll()
     @describeSequence()
   vars:->
-    @maxScroll = -10000
+    @maxScroll = -8000
     @frameDurationTime = 1000
     @$treePath = $('#js-tree-path')
     @$riverPath = $('#js-river-path')
@@ -21,6 +21,7 @@ class Main
     @$fish5 = $('#js-fish5')
     @$plate = $('#js-plate')
     @$fork = $('#js-fork')
+    @$knife = $('#js-knife')
     @$logo = $('#js-logo')
     @$eatenPath = $('#js-eaten-path')
     @$tree = $('#js-tree')
@@ -62,10 +63,11 @@ class Main
     start += @frameDurationTime/4
     dur = @frameDurationTime
     @grass  = TweenMax.to $(document.body), 1,
-      backgroundColor: '#c78743'
+      backgroundColor: '#f5cf43'
       ease:"Expo.easeIn"
 
     @controller.addTween start, @grass, dur
+    
 
     start += dur
     dur = 2*@frameDurationTime
@@ -82,6 +84,12 @@ class Main
     @river  = TweenMax.to @$river, 1, { fill: '#333'  }
     @controller.addTween start, @river, dur
 
+    @grass2  = TweenMax.to $(document.body), 1,
+      backgroundColor: '#774F38'
+      ease:"Expo.easeIn"
+
+    @controller.addTween start, @grass2, dur
+
     start += dur
     dur = 2*@frameDurationTime
     @skull  = TweenMax.to { startOffset: 2600 }, 1,
@@ -93,35 +101,35 @@ class Main
 
     start += dur/8
     dur = @frameDurationTime/2
-    @skull3  = TweenMax.to @$skull3, 1, { opacity: .25  }
+    @skull3  = TweenMax.to @$skull3, 1, { opacity: .15  }
     @controller.addTween start, @skull3, dur
     @fish5  = TweenMax.to @$fish5, 1, { opacity: 0 }
     @controller.addTween start, @fish5, dur
 
     start += dur/4
     dur = @frameDurationTime/2
-    @skull2  = TweenMax.to @$skull2, 1, { opacity: .25  }
+    @skull2  = TweenMax.to @$skull2, 1, { opacity: .15  }
     @controller.addTween start, @skull2, dur
     @fish4  = TweenMax.to @$fish4, 1, { opacity: 0 }
     @controller.addTween start, @fish4, dur
 
     start += dur/6
     dur = @frameDurationTime/2
-    @skull1  = TweenMax.to @$skull1, 1, { opacity: .25  }
+    @skull1  = TweenMax.to @$skull1, 1, { opacity: .15  }
     @controller.addTween start, @skull1, dur
     @fish3  = TweenMax.to @$fish3, 1, { opacity: 0 }
     @controller.addTween start, @fish3, dur
 
     start += dur/6
     dur = @frameDurationTime/2
-    @skull5  = TweenMax.to @$skull5, 1, { opacity: .25  }
+    @skull5  = TweenMax.to @$skull5, 1, { opacity: .15  }
     @controller.addTween start, @skull5, dur
     @fish2  = TweenMax.to @$fish2, 1, { opacity: 0 }
     @controller.addTween start, @fish2, dur
 
     start += dur/6
     dur = @frameDurationTime/2
-    @skull4  = TweenMax.to @$skull4, 1, { opacity: .25  }
+    @skull4  = TweenMax.to @$skull4, 1, { opacity: .15  }
     @controller.addTween start, @skull4, dur
     @fish1  = TweenMax.to @$fish1, 1, { opacity: 0 }
     @controller.addTween start, @fish1, dur
@@ -138,22 +146,24 @@ class Main
     start += dur/2
     dur = 2*@frameDurationTime
     @eaten  = TweenMax.to { startOffset: 2600 }, 1,
-      startOffset: 800
+      startOffset: 880
       onUpdate:=>
         offset = @eaten.target.startOffset
         @$eatenPath[0].setAttribute 'startOffset', offset
+
     @controller.addTween start, @eaten, dur
 
     start += dur/2
     dur = @frameDurationTime
     @forkTween  = TweenMax.to { startOffset: 1000 }, 1,
-      startOffset: -150
+      startOffset: 50
       onUpdate:=>
         offset = @forkTween.target.startOffset
-        @$fork[0].setAttribute 'y', offset
+        @$fork[0].setAttribute 'transform', "translate(0,#{offset})"
+        @$knife[0].setAttribute 'transform', "translate(0,#{offset})"
     @controller.addTween start, @forkTween, dur
 
-    start += dur/6
+    start += dur
     dur = @frameDurationTime/2
     @logo  = TweenMax.to @$logo, 1, { opacity: 1 }
     @controller.addTween start, @logo, dur
