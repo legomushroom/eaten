@@ -1,5 +1,8 @@
 class Main
   constructor:->
+    # path = document.getElementById 'river-path'
+    # console.log @convertToAbsolute path
+    
     @vars()
     @initScroll()
     @describeSequence()
@@ -175,5 +178,61 @@ class Main
       func.apply context, unshiftArgs
     bindArgs = Array::slice.call(arguments, 2)
     wrapper
+
+  convertToAbsolute:(path) ->
+    x0 = undefined
+    y0 = undefined
+    x1 = undefined
+    y1 = undefined
+    x2 = undefined
+    y2 = undefined
+    segs = path.pathSegList
+    x = 0
+    y = 0
+    i = 0
+    len = segs.numberOfItems
+
+    while i < len
+      seg = segs.getItem(i)
+      c = seg.pathSegTypeAsLetter
+      if /[MLHVCSQTA]/.test(c)
+        x = seg.x  if "x" of seg
+        y = seg.y  if "y" of seg
+      else
+        x1 = x + seg.x1  if "x1" of seg
+        x2 = x + seg.x2  if "x2" of seg
+        y1 = y + seg.y1  if "y1" of seg
+        y2 = y + seg.y2  if "y2" of seg
+        x += seg.x  if "x" of seg
+        y += seg.y  if "y" of seg
+        switch c
+          when "m"
+            segs.replaceItem path.createSVGPathSegMovetoAbs(x, y), i
+          when "l"
+            segs.replaceItem path.createSVGPathSegLinetoAbs(x, y), i
+          when "h"
+            segs.replaceItem path.createSVGPathSegLinetoHorizontalAbs(x), i
+          when "v"
+            segs.replaceItem path.createSVGPathSegLinetoVerticalAbs(y), i
+          when "c"
+            segs.replaceItem path.createSVGPathSegCurvetoCubicAbs(x, y, x1, y1, x2, y2), i
+          when "s"
+            segs.replaceItem path.createSVGPathSegCurvetoCubicSmoothAbs(x, y, x2, y2), i
+          when "q"
+            segs.replaceItem path.createSVGPathSegCurvetoQuadraticAbs(x, y, x1, y1), i
+          when "t"
+            segs.replaceItem path.createSVGPathSegCurvetoQuadraticSmoothAbs(x, y), i
+          when "a"
+            segs.replaceItem path.createSVGPathSegArcAbs(x, y, seg.r1, seg.r2, seg.angle, seg.largeArcFlag, seg.sweepFlag), i
+          when "z", "Z"
+            x = x0
+            y = y0
+      
+      # Record the start of a subpath
+      if c is "M" or c is "m"
+        x0 = x
+        y0 = y
+      ++i
+    return
 
 new Main
