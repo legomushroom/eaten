@@ -1,9 +1,7 @@
 class Main
   constructor:->
-    # path = document.getElementById 'river-path'
-    # console.log @convertToAbsolute path
-    
     @vars()
+    @fixFF()
     @initScroll()
     @describeSequence()
   vars:->
@@ -71,11 +69,11 @@ class Main
 
     @controller.addTween start, @grass, dur
     
-
     start += dur
     dur = 2*@frameDurationTime
+    offset = if @isFF() then -400 else 200
     @river1  = TweenMax.to { startOffset: 2400 }, 1,
-      startOffset: 200
+      startOffset: offset
       onUpdate:=>
         offset = @river1.target.startOffset
         @$riverPath[0].setAttribute 'startOffset', offset
@@ -84,19 +82,21 @@ class Main
 
     start += dur/4
     dur = @frameDurationTime
-    @river  = TweenMax.to @$river, 1, { fill: '#333'  }
+    prop = if @isFF() then { stroke: '#333' } else { fill: '#333'  }
+    @river  = TweenMax.to @$river, 1, prop
     @controller.addTween start, @river, dur
 
     @grass2  = TweenMax.to $(document.body), 1,
       backgroundColor: '#774F38'
-      ease:"Expo.easeIn"
+      ease: "Expo.easeIn"
 
     @controller.addTween start, @grass2, dur
 
     start += dur
     dur = 2*@frameDurationTime
+    offset = if @isFF() then -250 else 100
     @skull  = TweenMax.to { startOffset: 2600 }, 1,
-      startOffset: 100
+      startOffset: offset
       onUpdate:=>
         offset = @skull.target.startOffset
         @$skullPath[0].setAttribute 'startOffset', offset
@@ -179,60 +179,17 @@ class Main
     bindArgs = Array::slice.call(arguments, 2)
     wrapper
 
-  convertToAbsolute:(path) ->
-    x0 = undefined
-    y0 = undefined
-    x1 = undefined
-    y1 = undefined
-    x2 = undefined
-    y2 = undefined
-    segs = path.pathSegList
-    x = 0
-    y = 0
-    i = 0
-    len = segs.numberOfItems
+  fixFF:->
+    if !@isFF() then return
+    @$ffRiverPath = $ '#ff-river-path'
+    @$ffRiverPath.css 'opacity': 1
+    @$river.css 'opacity': 0
+    @$riverPath.attr 'xlink:href', '#ff-river-path'
+    @$skullPath.attr 'xlink:href', '#ff-river-path'
+    $('[id*="js-skull"]:not(#js-skull-path), [id*="js-fish"]').hide()
+    @$river = @$ffRiverPath
 
-    while i < len
-      seg = segs.getItem(i)
-      c = seg.pathSegTypeAsLetter
-      if /[MLHVCSQTA]/.test(c)
-        x = seg.x  if "x" of seg
-        y = seg.y  if "y" of seg
-      else
-        x1 = x + seg.x1  if "x1" of seg
-        x2 = x + seg.x2  if "x2" of seg
-        y1 = y + seg.y1  if "y1" of seg
-        y2 = y + seg.y2  if "y2" of seg
-        x += seg.x  if "x" of seg
-        y += seg.y  if "y" of seg
-        switch c
-          when "m"
-            segs.replaceItem path.createSVGPathSegMovetoAbs(x, y), i
-          when "l"
-            segs.replaceItem path.createSVGPathSegLinetoAbs(x, y), i
-          when "h"
-            segs.replaceItem path.createSVGPathSegLinetoHorizontalAbs(x), i
-          when "v"
-            segs.replaceItem path.createSVGPathSegLinetoVerticalAbs(y), i
-          when "c"
-            segs.replaceItem path.createSVGPathSegCurvetoCubicAbs(x, y, x1, y1, x2, y2), i
-          when "s"
-            segs.replaceItem path.createSVGPathSegCurvetoCubicSmoothAbs(x, y, x2, y2), i
-          when "q"
-            segs.replaceItem path.createSVGPathSegCurvetoQuadraticAbs(x, y, x1, y1), i
-          when "t"
-            segs.replaceItem path.createSVGPathSegCurvetoQuadraticSmoothAbs(x, y), i
-          when "a"
-            segs.replaceItem path.createSVGPathSegArcAbs(x, y, seg.r1, seg.r2, seg.angle, seg.largeArcFlag, seg.sweepFlag), i
-          when "z", "Z"
-            x = x0
-            y = y0
-      
-      # Record the start of a subpath
-      if c is "M" or c is "m"
-        x0 = x
-        y0 = y
-      ++i
-    return
+  isFF:->
+    navigator.userAgent.toLowerCase().indexOf('firefox') > -1
 
 new Main

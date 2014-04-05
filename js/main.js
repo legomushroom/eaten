@@ -4,6 +4,7 @@
   Main = (function() {
     function Main() {
       this.vars();
+      this.fixFF();
       this.initScroll();
       this.describeSequence();
     }
@@ -62,7 +63,7 @@
     };
 
     Main.prototype.describeSequence = function() {
-      var dur, start;
+      var dur, offset, prop, start;
       start = 1;
       dur = 2 * this.frameDurationTime;
       this.treePath = TweenMax.to({
@@ -94,13 +95,13 @@
       this.controller.addTween(start, this.grass, dur);
       start += dur;
       dur = 2 * this.frameDurationTime;
+      offset = this.isFF() ? -400 : 200;
       this.river1 = TweenMax.to({
         startOffset: 2400
       }, 1, {
-        startOffset: 200,
+        startOffset: offset,
         onUpdate: (function(_this) {
           return function() {
-            var offset;
             offset = _this.river1.target.startOffset;
             return _this.$riverPath[0].setAttribute('startOffset', offset);
           };
@@ -109,9 +110,12 @@
       this.controller.addTween(start, this.river1, dur);
       start += dur / 4;
       dur = this.frameDurationTime;
-      this.river = TweenMax.to(this.$river, 1, {
+      prop = this.isFF() ? {
+        stroke: '#333'
+      } : {
         fill: '#333'
-      });
+      };
+      this.river = TweenMax.to(this.$river, 1, prop);
       this.controller.addTween(start, this.river, dur);
       this.grass2 = TweenMax.to($(document.body), 1, {
         backgroundColor: '#774F38',
@@ -120,13 +124,13 @@
       this.controller.addTween(start, this.grass2, dur);
       start += dur;
       dur = 2 * this.frameDurationTime;
+      offset = this.isFF() ? -250 : 100;
       this.skull = TweenMax.to({
         startOffset: 2600
       }, 1, {
-        startOffset: 100,
+        startOffset: offset,
         onUpdate: (function(_this) {
           return function() {
-            var offset;
             offset = _this.skull.target.startOffset;
             return _this.$skullPath[0].setAttribute('startOffset', offset);
           };
@@ -191,7 +195,6 @@
         startOffset: 0,
         onUpdate: (function(_this) {
           return function() {
-            var offset;
             offset = _this.plate.target.startOffset;
             return _this.$plate[0].setAttribute('y', offset);
           };
@@ -206,7 +209,6 @@
         startOffset: 880,
         onUpdate: (function(_this) {
           return function() {
-            var offset;
             offset = _this.eaten.target.startOffset;
             return _this.$eatenPath[0].setAttribute('startOffset', offset);
           };
@@ -221,7 +223,6 @@
         startOffset: 50,
         onUpdate: (function(_this) {
           return function() {
-            var offset;
             offset = _this.forkTween.target.startOffset;
             _this.$fork[0].setAttribute('transform', "translate(0," + offset + ")");
             return _this.$knife[0].setAttribute('transform', "translate(0," + offset + ")");
@@ -249,88 +250,25 @@
       return wrapper;
     };
 
-    Main.prototype.convertToAbsolute = function(path) {
-      var c, i, len, seg, segs, x, x0, x1, x2, y, y0, y1, y2;
-      x0 = void 0;
-      y0 = void 0;
-      x1 = void 0;
-      y1 = void 0;
-      x2 = void 0;
-      y2 = void 0;
-      segs = path.pathSegList;
-      x = 0;
-      y = 0;
-      i = 0;
-      len = segs.numberOfItems;
-      while (i < len) {
-        seg = segs.getItem(i);
-        c = seg.pathSegTypeAsLetter;
-        if (/[MLHVCSQTA]/.test(c)) {
-          if ("x" in seg) {
-            x = seg.x;
-          }
-          if ("y" in seg) {
-            y = seg.y;
-          }
-        } else {
-          if ("x1" in seg) {
-            x1 = x + seg.x1;
-          }
-          if ("x2" in seg) {
-            x2 = x + seg.x2;
-          }
-          if ("y1" in seg) {
-            y1 = y + seg.y1;
-          }
-          if ("y2" in seg) {
-            y2 = y + seg.y2;
-          }
-          if ("x" in seg) {
-            x += seg.x;
-          }
-          if ("y" in seg) {
-            y += seg.y;
-          }
-          switch (c) {
-            case "m":
-              segs.replaceItem(path.createSVGPathSegMovetoAbs(x, y), i);
-              break;
-            case "l":
-              segs.replaceItem(path.createSVGPathSegLinetoAbs(x, y), i);
-              break;
-            case "h":
-              segs.replaceItem(path.createSVGPathSegLinetoHorizontalAbs(x), i);
-              break;
-            case "v":
-              segs.replaceItem(path.createSVGPathSegLinetoVerticalAbs(y), i);
-              break;
-            case "c":
-              segs.replaceItem(path.createSVGPathSegCurvetoCubicAbs(x, y, x1, y1, x2, y2), i);
-              break;
-            case "s":
-              segs.replaceItem(path.createSVGPathSegCurvetoCubicSmoothAbs(x, y, x2, y2), i);
-              break;
-            case "q":
-              segs.replaceItem(path.createSVGPathSegCurvetoQuadraticAbs(x, y, x1, y1), i);
-              break;
-            case "t":
-              segs.replaceItem(path.createSVGPathSegCurvetoQuadraticSmoothAbs(x, y), i);
-              break;
-            case "a":
-              segs.replaceItem(path.createSVGPathSegArcAbs(x, y, seg.r1, seg.r2, seg.angle, seg.largeArcFlag, seg.sweepFlag), i);
-              break;
-            case "z":
-            case "Z":
-              x = x0;
-              y = y0;
-          }
-        }
-        if (c === "M" || c === "m") {
-          x0 = x;
-          y0 = y;
-        }
-        ++i;
+    Main.prototype.fixFF = function() {
+      if (!this.isFF()) {
+        return;
       }
+      this.$ffRiverPath = $('#ff-river-path');
+      this.$ffRiverPath.css({
+        'opacity': 1
+      });
+      this.$river.css({
+        'opacity': 0
+      });
+      this.$riverPath.attr('xlink:href', '#ff-river-path');
+      this.$skullPath.attr('xlink:href', '#ff-river-path');
+      $('[id*="js-skull"]:not(#js-skull-path), [id*="js-fish"]').hide();
+      return this.$river = this.$ffRiverPath;
+    };
+
+    Main.prototype.isFF = function() {
+      return navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
     };
 
     return Main;
