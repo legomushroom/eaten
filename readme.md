@@ -1,5 +1,6 @@
-use case example for [text animation](http://blog.legomushroom.com/2014/04/text-animation-path/)
+Use case example for [text animation](http://blog.legomushroom.com/2014/04/text-animation-path/)
 blog post.
+---------------------
 
 The MIT License (MIT)
 
