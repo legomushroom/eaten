@@ -3,34 +3,24 @@
 	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 1280 900" enable-background="new 0 0 1280 900" xml:space="preserve">
 
+
 <g id="js-tree">
-	<g>
-		<path fill="none" stroke="#2a6900" stroke-width="3" stroke-miterlimit="10" d="M977.103,277.819
-			c-9.108,0-16.479-5.342-16.479-11.943"/>
-		<path fill="none" stroke="#2a6900" stroke-width="3" stroke-miterlimit="10" d="M944.145,277.819
-			c9.11,0,16.479-5.342,16.479-11.943"/>
-	</g>
-	<g>
-		<path fill="none" stroke="#2a6900" stroke-width="3" stroke-miterlimit="10" d="M977.103,289.421
-			c-9.108,0-16.479-5.342-16.479-11.943"/>
-		<path fill="none" stroke="#2a6900" stroke-width="3" stroke-miterlimit="10" d="M944.145,289.421
-			c9.11,0,16.479-5.342,16.479-11.943"/>
-	</g>
-	<g>
-		<path fill="none" stroke="#2a6900" stroke-width="3" stroke-miterlimit="10" d="M977.103,300.555
-			c-9.108,0-16.479-5.343-16.479-11.944"/>
-		<path fill="none" stroke="#2a6900" stroke-width="3" stroke-miterlimit="10" d="M944.145,300.555
-			c9.11,0,16.479-5.343,16.479-11.944"/>
-	</g>
-	<g>
-		<path fill="none" stroke="#2a6900" stroke-width="3" stroke-miterlimit="10" d="M977.103,312.499
-			c-9.108,0-16.479-5.343-16.479-11.944"/>
-		<path fill="none" stroke="#2a6900" stroke-width="3" stroke-miterlimit="10" d="M944.145,312.499
-			c9.11,0,16.479-5.343,16.479-11.944"/>
-	</g>
-	
-		<line fill="none" stroke="#774F38" stroke-width="3" stroke-miterlimit="10" x1="960.624" y1="321.447" x2="960.624" y2="265.876"/>
+	<rect id="Rectangle-1" x="956.871" y="314.766" sketch:type="MSShapeGroup" fill="#5F4336" width="7.642" height="6.837">
+	</rect>
+	<path id="Shape" sketch:type="MSShapeGroup" fill="#38AA37" d="M960.062,315.233c-0.799,0.053-16.538-0.77-16.538-0.77l4.403-9.443
+		l-5.201,0.743l10.759-21.062l-4.678,2.732l8.888-16.34l-3.824,1.671l6.797-13.369l7.566,15.916l-3.604-1.989l8.228,18.833
+		l-5.476-3.422l10.759,17.958l-7.154-4.642l6.714,12.069L960.062,315.233L960.062,315.233z"/>
+	<path id="Shape_1_" sketch:type="MSShapeGroup" opacity="0.1" fill="#010202" enable-background="new  " d="M978.074,306.738
+		l-10.72-17.95l5.483,3.399l-8.198-18.853l3.592,2.018l-7.539-15.958v55.84l16.943-1.062l-6.689-12.108L978.074,306.738z"/>
 </g>
+
+<rect id="Rectangle-1_1_" x="942.727" y="340.766"  fill="#5F4336" width="7.642" height="4.837">
+</rect>
+<rect id="Rectangle-1_2_" x="993.871" y="326.766"  fill="#5F4336" width="7.642" height="4.837">
+</rect>
+<rect id="Rectangle-1_3_" x="956.871" y="316.766"  fill="#5F4336" width="7.642" height="4.837">
+</rect>
+
 <g>
 	<g>
 		<path id="js-river" fill="#00A8C6" d="M1267.783,901.705c10.137,7.238,25.881,9.184,37.89,7.989c11.61-1.158,23.417-5.673,31.603-14.26

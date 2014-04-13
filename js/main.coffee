@@ -27,6 +27,7 @@ class Main
     @$eatenPath = $('#js-eaten-path')
     @$tree = $('#js-tree')
     @$river = $('#js-river')
+    @$scrollSuggest = $('#js-scroll-suggest')
   initScroll:->
     @scroller = new IScroll '#js-main',
       probeType: 3
@@ -53,6 +54,10 @@ class Main
       onUpdate:=>
         offset = @treePath.target.startOffset
         @$treePath[0].setAttribute 'startOffset', offset
+      onStart:=>
+        @$scrollSuggest.hide()
+      onReverseComplete:=>
+        @$scrollSuggest.show()
 
     @controller.addTween start, @treePath, dur
 
@@ -104,35 +109,35 @@ class Main
 
     start += dur/8
     dur = @frameDurationTime/2
-    @skull3  = TweenMax.to @$skull3, 1, { opacity: .15  }
+    @skull3  = TweenMax.to @$skull3, 1, { opacity: 1  }
     @controller.addTween start, @skull3, dur
     @fish5  = TweenMax.to @$fish5, 1, { opacity: 0 }
     @controller.addTween start, @fish5, dur
 
     start += dur/4
     dur = @frameDurationTime/2
-    @skull2  = TweenMax.to @$skull2, 1, { opacity: .15  }
+    @skull2  = TweenMax.to @$skull2, 1, { opacity: 1  }
     @controller.addTween start, @skull2, dur
     @fish4  = TweenMax.to @$fish4, 1, { opacity: 0 }
     @controller.addTween start, @fish4, dur
 
     start += dur/6
     dur = @frameDurationTime/2
-    @skull1  = TweenMax.to @$skull1, 1, { opacity: .15  }
+    @skull1  = TweenMax.to @$skull1, 1, { opacity: 1  }
     @controller.addTween start, @skull1, dur
     @fish3  = TweenMax.to @$fish3, 1, { opacity: 0 }
     @controller.addTween start, @fish3, dur
 
     start += dur/6
     dur = @frameDurationTime/2
-    @skull5  = TweenMax.to @$skull5, 1, { opacity: .15  }
+    @skull5  = TweenMax.to @$skull5, 1, { opacity: 1  }
     @controller.addTween start, @skull5, dur
     @fish2  = TweenMax.to @$fish2, 1, { opacity: 0 }
     @controller.addTween start, @fish2, dur
 
     start += dur/6
     dur = @frameDurationTime/2
-    @skull4  = TweenMax.to @$skull4, 1, { opacity: .15  }
+    @skull4  = TweenMax.to @$skull4, 1, { opacity: 1  }
     @controller.addTween start, @skull4, dur
     @fish1  = TweenMax.to @$fish1, 1, { opacity: 0 }
     @controller.addTween start, @fish1, dur

@@ -1,16 +1,22 @@
 // BLOCKS
 @import '../assets/imports.styl'
 
+.scroll-suggest
+	background url('i/scroll-suggest.svg') no-repeat center center
+	width 13px
+	height 19px
+	position absolute
+	bottom 20px
+	left 50%
 
 .text
 	fill white
-	font-size 26px
+	font-size 22px
 	white-space nowrap
-	font-family 'Offside'
+	font-family 'Open Sans'
+	text-transform uppercase
 	&--label
 		font-size 13px
-
-
 
 
 .svg-container
@@ -23,8 +29,3 @@
 		svg 
 			rect 100%
 
-@-moz-document url-prefix() {
-	.text{
-		font-family 'Open Sans'
-	}
-}
