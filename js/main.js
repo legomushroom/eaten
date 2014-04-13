@@ -20,6 +20,7 @@
       this.$skull3 = $('#js-skull3');
       this.$skull4 = $('#js-skull4');
       this.$skull5 = $('#js-skull5');
+      this.$skulls = $('#js-skulls');
       this.$fish1 = $('#js-fish1');
       this.$fish2 = $('#js-fish2');
       this.$fish3 = $('#js-fish3');
@@ -212,7 +213,19 @@
         })(this)
       });
       this.controller.addTween(start, this.plate, dur);
-      start += dur / 2;
+      start += dur / 8;
+      dur = this.frameDurationTime / 2;
+      this.skulls = TweenMax.to({
+        opacity: 1
+      }, 1, {
+        opacity: .15,
+        onUpdate: (function(_this) {
+          return function() {
+            return _this.$skulls.attr('opacity', _this.skulls.target.opacity);
+          };
+        })(this)
+      });
+      this.controller.addTween(start, this.skulls, dur);
       dur = 2 * this.frameDurationTime;
       this.eaten = TweenMax.to({
         startOffset: 2600

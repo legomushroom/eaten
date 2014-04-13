@@ -15,6 +15,7 @@ class Main
     @$skull3 = $('#js-skull3')
     @$skull4 = $('#js-skull4')
     @$skull5 = $('#js-skull5')
+    @$skulls = $('#js-skulls')
     @$fish1 = $('#js-fish1')
     @$fish2 = $('#js-fish2')
     @$fish3 = $('#js-fish3')
@@ -151,7 +152,15 @@ class Main
         @$plate[0].setAttribute 'y', offset
     @controller.addTween start, @plate, dur
 
-    start += dur/2
+    start += dur/8
+    dur = @frameDurationTime/2
+    @skulls  = TweenMax.to { opacity: 1 }, 1,
+      opacity: .15
+      onUpdate: =>
+        @$skulls.attr 'opacity', @skulls.target.opacity
+    @controller.addTween start, @skulls, dur
+
+    # start += dur/2
     dur = 2*@frameDurationTime
     @eaten  = TweenMax.to { startOffset: 2600 }, 1,
       startOffset: 880
